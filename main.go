@@ -4,8 +4,15 @@ import (
 	"encoding/json"
 	"io/ioutil"
 	"log"
+	"math"
 	"net/http"
 	"strconv"
+	"time"
+)
+
+const (
+	// See http://golang.org/pkg/time/#Parse
+	timeFormat = "2006-01-02"
 )
 
 var source string = "http://www.howmanypeopleareinspacerightnow.com/peopleinspace.json"
@@ -62,12 +69,17 @@ func foo(w http.ResponseWriter, r *http.Request) {
 	data := getData()
 
 	frames := []Frames{
-		Frames{Index: 0, Text: strconv.Itoa(data.Number) + peopleString, Icon: nil},
+		Frames{Index: 0, Text: strconv.Itoa(data.Number) + peopleString, Icon: "i1631"},
 	}
 
 	for key, value := range data.People {
 		var temp Frames
-		temp = Frames{Index: key + 1, Text: value.Name + " since " + value.Launchdate, Icon: nil}
+		then, err := time.Parse(timeFormat, value.Launchdate)
+		if err != nil {
+			log.Fatal("Error parsing the date")
+		}
+		duration := time.Since(then)
+		temp = Frames{Index: key + 1, Text: value.Name + " since " + strconv.FormatFloat(math.Ceil(duration.Hours()/24.00), 'f', 0, 64) + " days", Icon: "i1631"}
 		frames = append(frames, temp)
 	}
 

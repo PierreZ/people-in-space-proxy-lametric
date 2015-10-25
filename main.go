@@ -38,7 +38,7 @@ type PeopleInSpace struct {
 	} `json:"people"`
 }
 type LaMetric struct {
-	Screen []Frames `json:frames`
+	Frames []Frames `json:frames`
 }
 type Frames struct {
 	Index int         `json:"index"`
@@ -84,7 +84,7 @@ func foo(w http.ResponseWriter, r *http.Request) {
 	}
 
 	var lametric LaMetric
-	lametric.Screen = frames
+	lametric.Frames = frames
 
 	js, err := json.Marshal(lametric)
 	if err != nil {

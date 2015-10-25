@@ -38,7 +38,7 @@ type PeopleInSpace struct {
 	} `json:"people"`
 }
 type LaMetric struct {
-	Frames []Frames `json:frames`
+	Frames []Frames `json:"frames"`
 }
 type Frames struct {
 	Index int         `json:"index"`

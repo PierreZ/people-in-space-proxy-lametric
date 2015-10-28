@@ -72,16 +72,20 @@ func foo(w http.ResponseWriter, r *http.Request) {
 		Frames{Index: 0, Text: strconv.Itoa(data.Number) + peopleString, Icon: "i1631"},
 	}
 
-	for key, value := range data.People {
-		var temp Frames
+var temp string
+	for _, value := range data.People {
+
 		then, err := time.Parse(timeFormat, value.Launchdate)
 		if err != nil {
 			log.Fatal("Error parsing the date")
 		}
 		duration := time.Since(then)
-		temp = Frames{Index: key + 1, Text: value.Name + " since " + strconv.FormatFloat(math.Ceil(duration.Hours()/24.00), 'f', 0, 64) + " days", Icon: "i1631"}
-		frames = append(frames, temp)
+		temp = temp + value.Name + " since " + strconv.FormatFloat(math.Ceil(duration.Hours()/24.00), 'f', 0, 64) + " days - "
+
 	}
+		var people Frames
+			people = Frames{Index: 1, Text: temp, Icon: "i1631"}
+		frames = append(frames, people)
 
 	var lametric LaMetric
 	lametric.Frames = frames
